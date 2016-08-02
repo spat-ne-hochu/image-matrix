@@ -52,7 +52,7 @@ class Matrix {
         cell.appendChild(number);
 
         this.elem.appendChild(cell);
-        this.cells[`${x}_${y}`] = cell;
+        this.cells[Matrix._getCellKey(x, y)] = cell;
     }
 
     hasCell(x, y) {
@@ -64,8 +64,10 @@ class Matrix {
     }
 
     removeCell(x, y) {
-        this.elem.removeChild(this.cells[Matrix._getCellKey(x, y)]);
-        delete this.cells[Matrix._getCellKey(x, y)];
+        let key = Matrix._getCellKey(x, y);
+
+        this.elem.removeChild(this.cells[key]);
+        delete this.cells[key];
     }
 
     lazyLoadCells() {

@@ -13,7 +13,7 @@ function getIndex(x, y) {
     return y * w + x;
 }
 
-module.exports = function getImageKeyForPosition(x, y) {
+module.exports = function getImageUrlForPosition(x, y) {
     let key = getIndex(x, y);
 
     return key % 2 === 0 ?
