@@ -4,7 +4,7 @@ class Eventable {
         this._timeout   = null;
         this._wait      = false;
         this._overflow  = null;
-        this.ms         = 333;
+        this.ms         = 250;
         this.isOverflow = false;
     }
 

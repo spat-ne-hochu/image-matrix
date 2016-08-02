@@ -25,6 +25,7 @@ class Matrix {
         this.y                = 0;
         this.cells            = {};
         this._lastCurrentCell = null;
+        this._tNormalize      = null;
 
         this.setPosition(0, 0);
 
@@ -95,31 +96,25 @@ class Matrix {
 
     normalize() {
         let tx = 0,
-            ty = 0;
+            ty = 0,
+            nL = Matrix.NORMALIZE_LIMIT;
 
-        if (this.x < -cX * 2) tx =  cX * 2;
-        if (this.x >  cX * 2) tx = -cX * 2;
-        if (this.y < -cY * 2) ty =  cY * 2;
-        if (this.y >  cY * 2) ty = -cY * 2;
-
-        console.log(tx, ty, this.x, this.y, cX * 2, cY * 2);
+        if (this.x < -cX * nL || this.x >  cX * nL) tx =  ~~(this.x / -cX) * cX;
+        if (this.y < -cY * nL || this.y >  cY * nL) ty =  ~~(this.y / -cY) * cY;
 
         if (tx || ty) {
-            console.log('normalize', tx, ty);
-
             let txCell = tx * cellW,
                 tyCell = ty * cellH;
 
             for (let key of Object.keys(this.cells)) {
                 let cell = this.cells[key];
 
-                cell.style.top  = `${parseInt(cell.style.top,  10) - tyCell}px`;
-                cell.style.left = `${parseInt(cell.style.left, 10) - txCell}px`;
+                cell.style.top  = `${parseInt(cell.style.top,  10) + tyCell}px`;
+                cell.style.left = `${parseInt(cell.style.left, 10) + txCell}px`;
+
 
                 let [lx, ly] = key.split('_'),
                     newKey = Matrix._getCellKey(+lx + tx, +ly + ty);
-
-                console.log(key, newKey);
 
                 delete this.cells[key];
                 this.cells[newKey] = cell;
@@ -131,7 +126,9 @@ class Matrix {
             let cloneTransition        = this.elem.style.transition;
             this.elem.style.transition = 'none';
             this.updatePosition();
-            //this.elem.style.transition = cloneTransition;
+            this._h                    = this.elem.offsetHeight;
+            this.elem.style.transition = cloneTransition;
+            this._h                    = this.elem.offsetHeight;
         }
     }
 
@@ -140,14 +137,18 @@ class Matrix {
         this.y = y;
 
         this.setCurrentCell();
-        this.normalize();
+        this.updatePosition();
+
+        if (this._tNormalize) {
+            clearTimeout(this._tNormalize);
+        }
+
+        this._tNormalize = setTimeout(() => this.normalize(), 500);
 
         setTimeout(() => {
             this.gc();
             this.lazyLoadCells();
-        }, 400);
-
-        this.updatePosition();
+        }, 300);
     }
 
     updatePosition() {
@@ -199,6 +200,7 @@ class Matrix {
     }
 }
 
+Matrix.NORMALIZE_LIMIT = 4;
 Matrix.hw = 0;
 Matrix.hh = 0;
 Matrix.H_VIEW_SIZE = 0;

@@ -4,8 +4,8 @@ module.exports = {
         width  : 320
     },
     matrixSize : {
-        height : 4,
-        width  : 4
+        height : 32,
+        width  : 48
     },
     rootElement: document.body
 };
