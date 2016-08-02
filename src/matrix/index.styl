@@ -1,3 +1,6 @@
+body
+  background #444
+
 .b-matrix
   position            fixed
   display             inline-block
@@ -23,19 +26,25 @@
       box-shadow inset 0 0 0 16px rgba(0, 128, 255, 0), 0 0 32px 4px rgba(0, 0, 0, 0)
       transition box-shadow .33s ease-in-out
 
+    &_loading
+      opacity 0.5
+
+      & > ^[0]__image
+        opacity    0
+
     &_current
       z-index   256
       transform scale(1.25)
+      opacity   1
 
       &:before
         box-shadow inset 0 0 0 16px rgba(0, 128, 255, 0.66), 0 0 32px 4px rgba(0, 128, 255, 0.66)
 
-    &_loading
-      opacity    0
-
   &__image
+    transition     opacity .33s ease-in-out
     vertical-align top
     position       relative
+    opacity        1
     z-index        1
 
   &__number

@@ -39,6 +39,7 @@ class Matrix {
         cell.style.width  = `${cellW}px`;
         cell.style.top    = `${cellH * y}px`;
         cell.style.left   = `${cellW * x}px`;
+        cell.style.backgroundColor = Matrix.randomColor();
 
         let image         = document.createElement('img');
         image.className   = css.image._;
@@ -199,6 +200,19 @@ class Matrix {
         Matrix.hh = vSize.half.vh;
         Matrix.H_VIEW_SIZE = Math.ceil((~~(vSize.vh / cellH)) / 2) + 1;
         Matrix.W_VIEW_SIZE = Math.ceil((~~(vSize.vw / cellW))  / 2) + 1;
+    }
+
+    static randomColor() {
+        function rand(min, max) {
+            return min + Math.random() * (max - min);
+        }
+
+
+        let h = rand(1, 360),
+            s = rand(40, 60),
+            l = rand(40, 60);
+
+        return 'hsl(' + h + ',' + s + '%,' + l + '%)';
     }
 }
 
